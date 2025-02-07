@@ -32,10 +32,15 @@ if not api_key:
 
 app = FastAPI()
 
+# Add this new root endpoint
+@app.get("/")
+async def read_root():
+    return {"status": "ok", "message": "Praising Chat API is running"}
+
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://djpraisingchat.netlify.app/"],  # Replace with your Heroku frontend URL later
+    allow_origins=["https://djpraisingchat.netlify.app/"],  # Replace with your Netlify frontend URL later
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
