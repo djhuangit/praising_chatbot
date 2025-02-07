@@ -1,0 +1,17 @@
+# Environment variables
+.env
+*.env
+.env.*
+
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+
+# Database
+*.db
+*.sqlite3
+
+# Build outputs
+dist/
+build/
