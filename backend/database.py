@@ -12,13 +12,20 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
     raise ValueError("No DATABASE_URL environment variable set")
 
-# Modify URL for asyncpg if needed
+# Modify URL for asyncpg
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+asyncpg://")
+elif DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
 
-print(f"Connecting to database: {DATABASE_URL}")  # Add this for debugging
+print(f"Connecting to database: {DATABASE_URL}")
 
-engine = create_async_engine(DATABASE_URL, echo=True)
+engine = create_async_engine(
+    DATABASE_URL,
+    echo=True,
+    pool_pre_ping=True  # Add connection health check
+)
+
 async_session = sessionmaker(
     engine, class_=AsyncSession, expire_on_commit=False
 )
