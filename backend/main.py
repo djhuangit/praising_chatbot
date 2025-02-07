@@ -35,7 +35,7 @@ app = FastAPI()
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Replace with your Heroku frontend URL later
+    allow_origins=["https://djpraisingchat.netlify.app/"],  # Replace with your Heroku frontend URL later
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
