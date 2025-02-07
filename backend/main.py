@@ -180,4 +180,5 @@ async def get_cost():
 
 if __name__ == "__main__":
     import uvicorn
+    print("Current environment variables:", {k: v for k, v in os.environ.items() if 'DATABASE' in k})
     uvicorn.run(app, host="0.0.0.0", port=8000) 
