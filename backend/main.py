@@ -40,7 +40,7 @@ async def read_root():
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://djpraisingchat.netlify.app/"],  # Replace with your Netlify frontend URL later
+    allow_origins=["https://djpraisingchat.netlify.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

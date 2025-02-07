@@ -87,9 +87,8 @@ const Chat: React.FC = () => {
     // Load chat history and total cost when component mounts
     const loadChatHistoryAndCost = async () => {
       try {
-        const session_id = Cookies.get('session_id');
         const [historyResponse, costResponse] = await Promise.all([
-          axios.get('/api/chat/history', { headers: { 'Cookie': `session_id=${session_id}` } }),
+          axios.get('/api/chat/history'),
           axios.get('/api/chat/cost')
         ]);
         setMessages(historyResponse.data.messages);
