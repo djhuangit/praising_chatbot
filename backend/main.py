@@ -12,6 +12,7 @@ from models import Message, ChatHistory, CostTracking
 from dotenv import load_dotenv
 from sqlalchemy.future import select
 import logging
+import asyncio
 
 # Configure logging
 logging.basicConfig(
