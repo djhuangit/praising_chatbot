@@ -13,11 +13,10 @@ from dotenv import load_dotenv
 from sqlalchemy.future import select
 import logging
 import asyncio
-from config import settings
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO if settings.is_production else logging.DEBUG,
+    level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
         logging.StreamHandler()
@@ -27,15 +26,23 @@ logging.basicConfig(
 # Load environment variables
 load_dotenv()
 
+# Get environment configuration
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "https://djpraisingchat.netlify.app")
+LOCAL_FRONTEND_URLS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173"
+]
+
 # Configure OpenAI
-api_key = settings.OPENAI_API_KEY
+api_key = os.getenv("OPENAI_API_KEY")
 if not api_key:
     raise ValueError("OpenAI API key not found in environment variables")
 
 app = FastAPI(
-    title=settings.PROJECT_NAME,
-    version=settings.VERSION,
-    debug=settings.DEBUG
+    title="Praising Chat API",
+    description="A supportive and encouraging chat API",
+    version="1.0.0"
 )
 
 # Add this new root endpoint
@@ -43,15 +50,16 @@ app = FastAPI(
 async def read_root():
     return {
         "status": "ok",
-        "message": f"{settings.PROJECT_NAME} is running",
-        "version": settings.VERSION,
-        "environment": "production" if settings.is_production else "development"
+        "message": "Praising Chat API is running",
+        "environment": ENVIRONMENT,
+        "version": "1.0.0"
     }
 
 # Configure CORS
+allowed_origins = [FRONTEND_URL] + (LOCAL_FRONTEND_URLS if ENVIRONMENT == "development" else [])
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.BACKEND_CORS_ORIGINS,
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -190,5 +198,8 @@ async def get_cost():
 
 if __name__ == "__main__":
     import uvicorn
-    print("Current environment variables:", {k: v for k, v in os.environ.items() if 'DATABASE' in k})
-    uvicorn.run(app, host="0.0.0.0", port=8000) 
+    host = "0.0.0.0"  # Allow access from all interfaces
+    port = int(os.getenv("PORT", "8000"))
+    print(f"Starting server in {ENVIRONMENT} mode on {host}:{port}")
+    print("Current environment variables:", {k: v for k, v in os.environ.items() if k in ['DATABASE_URL', 'ENVIRONMENT', 'FRONTEND_URL', 'PORT']})
+    uvicorn.run(app, host=host, port=port) 

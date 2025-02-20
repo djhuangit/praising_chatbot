@@ -9,15 +9,25 @@ load_dotenv()
 # Get DATABASE_URL from environment variable, use SQLite as fallback for local development
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./kuakuaqun.db")
 
-print(f"Database mode: {'Production' if 'postgres' in DATABASE_URL else 'Local development'}")
+# Get deployment environment
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
+print(f"Running in {ENVIRONMENT} environment")
 
-# Modify URL for asyncpg if using PostgreSQL
-if DATABASE_URL.startswith("postgres://"):
-    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+asyncpg://")
-elif DATABASE_URL.startswith("postgresql://"):
-    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
+# Handle different database configurations
+if ENVIRONMENT == "production":
+    # PythonAnywhere MySQL configuration
+    DB_USERNAME = os.getenv("MYSQL_USERNAME")
+    DB_PASSWORD = os.getenv("MYSQL_PASSWORD")
+    DB_HOST = os.getenv("MYSQL_HOST")
+    DB_NAME = os.getenv("MYSQL_DATABASE")
+    
+    if all([DB_USERNAME, DB_PASSWORD, DB_HOST, DB_NAME]):
+        DATABASE_URL = f"mysql+aiomysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
+    else:
+        raise ValueError("Missing MySQL configuration in production environment")
 
-print(f"Connecting to database: {DATABASE_URL}")
+print(f"Database mode: {'Production' if ENVIRONMENT == 'production' else 'Local development'}")
+print(f"Connecting to database: {DATABASE_URL.replace(os.getenv('MYSQL_PASSWORD', ''), '****') if 'mysql' in DATABASE_URL else DATABASE_URL}")
 
 # Configure engine based on database type
 if "sqlite" in DATABASE_URL:
@@ -28,11 +38,13 @@ if "sqlite" in DATABASE_URL:
         connect_args={"check_same_thread": False}
     )
 else:
-    # PostgreSQL configuration
+    # MySQL/PostgreSQL configuration
     engine = create_async_engine(
         DATABASE_URL,
         echo=True,
-        pool_pre_ping=True
+        pool_pre_ping=True,
+        pool_size=10,
+        max_overflow=20
     )
 
 async_session = sessionmaker(

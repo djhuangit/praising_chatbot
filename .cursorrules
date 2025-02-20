@@ -94,6 +94,7 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 - Include info useful for debugging in the program output.
 - Read the file before you try to edit it.
 - Due to Cursor's limit, when you use `git` and `gh` and need to submit a multiline commit message, first write the message in a file, and then use `git commit -F <filename>` or similar command to commit. And then remove the file. Include "[Cursor] " in the commit message and PR title.
+- Use openai==1.61.1 for the OpenAI package to ensure compatibility with the latest API features
 
 ## Cursor learned
 
@@ -104,15 +105,36 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 
 # Scratchpad
 
-## Current Task: Deploy Backend to PythonAnywhere
+## Task: Deploy Backend to PythonAnywhere while maintaining local development
 
-Task: Deploy the FastAPI backend to PythonAnywhere while maintaining local development capability
+### Current Analysis:
+- Backend uses FastAPI with SQLite database
+- Has environment variables configuration
+- Uses async SQLAlchemy for database operations
+- Has CORS configuration for frontend
 
-Steps needed:
-[X] 1. Modify configuration to support both local and PythonAnywhere environments
-[X] 2. Create deployment configuration files
-[X] 3. Update CORS settings to include PythonAnywhere domain
-[X] 4. Create PythonAnywhere specific files (WSGI)
-[ ] 5. Document deployment steps
+### Required Changes:
+[X] 1. Modify database configuration to support both SQLite (local) and MySQL (PythonAnywhere)
+[X] 2. Update CORS settings to include PythonAnywhere domain
+[X] 3. Create PythonAnywhere specific configuration file (wsgi.py)
+[X] 4. Modify requirements.txt for PythonAnywhere
+[ ] 5. Create deployment instructions
 
-Current Progress: Configuration files created and updated. Now ready to document deployment steps.
+### Deployment Steps (after code changes):
+1. Sign up for PythonAnywhere account
+2. Create MySQL database on PythonAnywhere
+3. Upload code to PythonAnywhere
+4. Set up virtual environment
+5. Configure WSGI file
+6. Set environment variables
+7. Test deployment
+
+### Code Changes Made:
+1. Updated database.py to support both SQLite and MySQL
+2. Modified main.py with better environment configuration
+3. Updated requirements.txt with necessary packages
+4. Created wsgi.py for PythonAnywhere deployment
+5. Added .env.production template
+
+### Next Steps:
+Let's test the local development setup first to ensure everything still works before proceeding with deployment instructions.

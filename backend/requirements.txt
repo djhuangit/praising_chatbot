@@ -4,9 +4,11 @@ sqlalchemy==2.0.27
 asyncpg==0.29.0  # PostgreSQL async driver
 aiosqlite==0.19.0  # SQLite async driver
 python-dotenv==1.0.1
-openai==1.12.0
-pydantic==2.6.1
-pydantic-settings==2.1.0
+openai==1.61.1  # Updated to latest version for API compatibility
+pydantic==2.5.1
 python-multipart==0.0.9
-aiofiles==23.2.1
-psycopg2-binary==2.9.9  # For PostgreSQL support on PythonAnywhere 
+psycopg[binary]==3.1.18  # PostgreSQL adapter
+aiomysql==0.2.0  # For MySQL async support
+cryptography==42.0.2  # Required for MySQL
+PyMySQL==1.1.0  # MySQL client
+gunicorn==21.2.0  # Production server 
