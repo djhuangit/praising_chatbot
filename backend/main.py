@@ -13,10 +13,11 @@ from dotenv import load_dotenv
 from sqlalchemy.future import select
 import logging
 import asyncio
+from config import settings
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.INFO if settings.is_production else logging.DEBUG,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
         logging.StreamHandler()
@@ -27,21 +28,30 @@ logging.basicConfig(
 load_dotenv()
 
 # Configure OpenAI
-api_key = os.getenv("OPENAI_API_KEY")
+api_key = settings.OPENAI_API_KEY
 if not api_key:
     raise ValueError("OpenAI API key not found in environment variables")
 
-app = FastAPI()
+app = FastAPI(
+    title=settings.PROJECT_NAME,
+    version=settings.VERSION,
+    debug=settings.DEBUG
+)
 
 # Add this new root endpoint
 @app.get("/")
 async def read_root():
-    return {"status": "ok", "message": "Praising Chat API is running"}
+    return {
+        "status": "ok",
+        "message": f"{settings.PROJECT_NAME} is running",
+        "version": settings.VERSION,
+        "environment": "production" if settings.is_production else "development"
+    }
 
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://djpraisingchat.netlify.app"],
+    allow_origins=settings.BACKEND_CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -120,9 +130,9 @@ async def send_message(
 
         # Generate AI response
         try:
-            client = OpenAI(api_key=api_key)
+            client = OpenAI()
             response = client.chat.completions.create(
-                model="gpt-4o-mini",
+                model="gpt-4",
                 messages=[
                     {"role": "system", "content": "You are a supportive and encouraging friend. Your role is to provide positive, uplifting responses that make the user feel good about themselves and their achievements. Always maintain a positive, humorous and fluffy tone and keep the responses within 50 words. No emoji."},
                     {"role": "user", "content": message.content}

@@ -6,13 +6,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Get DATABASE_URL from environment variable
-DATABASE_URL = os.getenv("DATABASE_URL")
+# Get DATABASE_URL from environment variable, use SQLite as fallback for local development
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./kuakuaqun.db")
 
-if not DATABASE_URL:
-    raise ValueError("No DATABASE_URL environment variable set")
+print(f"Database mode: {'Production' if 'postgres' in DATABASE_URL else 'Local development'}")
 
-# Modify URL for asyncpg
+# Modify URL for asyncpg if using PostgreSQL
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+asyncpg://")
 elif DATABASE_URL.startswith("postgresql://"):
@@ -20,11 +19,21 @@ elif DATABASE_URL.startswith("postgresql://"):
 
 print(f"Connecting to database: {DATABASE_URL}")
 
-engine = create_async_engine(
-    DATABASE_URL,
-    echo=True,
-    pool_pre_ping=True  # Add connection health check
-)
+# Configure engine based on database type
+if "sqlite" in DATABASE_URL:
+    # SQLite specific configuration
+    engine = create_async_engine(
+        DATABASE_URL,
+        echo=True,
+        connect_args={"check_same_thread": False}
+    )
+else:
+    # PostgreSQL configuration
+    engine = create_async_engine(
+        DATABASE_URL,
+        echo=True,
+        pool_pre_ping=True
+    )
 
 async_session = sessionmaker(
     engine, class_=AsyncSession, expire_on_commit=False
