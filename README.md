@@ -41,7 +41,7 @@ A supportive and encouraging chat application that provides positive, uplifting 
 1. Clone the repository:
 ```bash
 git clone [repository-url]
-cd kuakuaqun_web
+cd praising_chatbot
 ```
 
 2. Backend Setup:
@@ -82,8 +82,6 @@ uvicorn main:app --reload
 cd frontend
 npm run dev
 ```
-
-The application will be available at `http://localhost:5173`
 
 ## Deployment
 
