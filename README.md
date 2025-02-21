@@ -1,4 +1,4 @@
-# KuaKua Qun - Your Supportive Chat Space
+# Praising Chatbot - Your Supportive Chat Space
 
 A supportive and encouraging chat application that provides positive, uplifting responses to help users feel good about themselves and their achievements. The application is built with a modern tech stack and features a clean, user-friendly interface.
 
