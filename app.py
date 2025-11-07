@@ -1,17 +1,21 @@
 # /// script
 # requires-python = ">=3.8"
 # dependencies = [
+#     "fastapi>=0.115.0",
 #     "gradio>=4.44.0",
 #     "openai>=1.61.1",
 #     "python-dotenv>=1.0.0",
+#     "uvicorn[standard]>=0.32.0",
 # ]
 # ///
 
 """
 Praising Chatbot - A supportive and encouraging chat application
-Built with Gradio for simple deployment
+Built with FastAPI + Gradio for flexible deployment
 """
 
+from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 import gradio as gr
 from openai import OpenAI
 import os
@@ -203,9 +207,71 @@ with gr.Blocks(
     )
 
 
+# Create FastAPI app
+app = FastAPI(
+    title="Praising Chatbot API",
+    description="A supportive chatbot with FastAPI backend and Gradio frontend",
+    version="0.2.0"
+)
+
+
+@app.get("/")
+async def root():
+    """Root endpoint - API information"""
+    return {
+        "message": "Praising Chatbot API",
+        "version": "0.2.0",
+        "endpoints": {
+            "api_docs": "/docs",
+            "chat_ui": "/gradio",
+            "health": "/health",
+            "stats": "/api/stats"
+        }
+    }
+
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint"""
+    return {
+        "status": "healthy",
+        "timestamp": datetime.now().isoformat(),
+        "service": "praising-chatbot"
+    }
+
+
+@app.get("/api/stats")
+async def api_stats():
+    """Get current usage statistics via API"""
+    return {
+        "total_tokens": total_tokens,
+        "total_cost": round(total_cost, 5),
+        "timestamp": datetime.now().isoformat()
+    }
+
+
+@app.post("/api/stats/reset")
+async def api_reset_stats():
+    """Reset usage statistics via API"""
+    global total_cost, total_tokens
+    total_cost = 0.0
+    total_tokens = 0
+    return {
+        "message": "Statistics reset successfully",
+        "total_tokens": total_tokens,
+        "total_cost": total_cost
+    }
+
+
+# Mount Gradio app on FastAPI
+app = gr.mount_gradio_app(app, demo, path="/gradio")
+
+
 if __name__ == "__main__":
-    demo.launch(
-        server_name="0.0.0.0",
-        server_port=7860,
-        share=False
+    import uvicorn
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=7860,
+        log_level="info"
     )
