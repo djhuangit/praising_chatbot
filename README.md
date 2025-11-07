@@ -1,124 +1,95 @@
 # Praising Chatbot - Your Supportive Chat Space
 
-A supportive and encouraging chat application that provides positive, uplifting responses to help users feel good about themselves and their achievements. Built with Gradio for simple deployment and a clean user interface.
+A supportive and encouraging chat application that provides positive, uplifting responses to help users feel good about themselves and their achievements. Built with a clean separation of frontend (Gradio) and backend (FastAPI) components.
 
 ## Features
 
 - Real-time chat interface with Gradio
+- RESTful API with FastAPI backend
 - Supportive AI responses using GPT-4o-mini
 - Cost and token usage tracking
 - Modern, responsive UI
-- Single Python file - easy to deploy anywhere
+- Modular architecture with clear separation of concerns
 - In-memory session tracking (no database required)
 
 ## Tech Stack
 
-- **Python 3.8+**
+- **Python 3.13+**
 - **uv** - Fast Python package manager
-- **Gradio** - For the web interface
+- **FastAPI** - Backend API framework
+- **Gradio** - Frontend web interface
 - **OpenAI API** - For AI responses (gpt-4o-mini)
+- **Pydantic** - Data validation and settings management
 - **Stateless architecture** - No persistent storage required
 
-### Why uv?
+## Project Structure
 
-- ⚡ **10-100x faster** than pip for dependency installation
-- 🔒 **Consistent** - Built-in lock file support
-- 🎯 **Simple** - Run scripts directly with `uv run` (no separate install needed)
-- 🔄 **Compatible** - Works with standard Python packaging (pip, PyPI)
-- 📦 **Self-contained** - Dependencies declared inline using PEP 723
+```
+praising_chatbot/
+├── src/                            # Source code
+│   ├── backend/                    # Backend components
+│   │   ├── api/                    # FastAPI routes and app
+│   │   │   ├── app.py              # FastAPI app factory
+│   │   │   └── routes.py           # API endpoints
+│   │   ├── models/                 # Data models (Pydantic)
+│   │   │   └── chat.py             # Chat-related models
+│   │   └── services/               # Business logic
+│   │       ├── openai_service.py   # OpenAI API integration
+│   │       ├── demo_service.py     # Demo/mock service (no API calls)
+│   │       └── stats_service.py    # Usage statistics tracking
+│   ├── frontend/                   # Frontend components
+│   │   └── components/             # UI components
+│   │       └── chat_interface.py   # Gradio chat interface
+│   └── config/                     # Configuration
+│       └── settings.py             # Environment variables, constants
+├── main.py                         # Application entry point
+├── app.py                          # Original single-file version (legacy)
+├── pyproject.toml                  # Project configuration
+├── requirements.txt                # Python dependencies
+└── .env                            # Environment variables (not in git)
+```
 
 ## Getting Started
 
 ### Prerequisites
-- Python 3.8 or higher
-- [uv](https://docs.astral.sh/uv/) (recommended) or pip
-- OpenAI API key
+- Python 3.13 or higher
+- uv for dependency management [(docs including installation guide)]((https://docs.astral.sh/uv/))
+- OpenAI API key (required only for production mode; app runs in demo mode by default)
 
-### Installation
-
-#### Using uv (Recommended - Fast!)
-
+### Quick Start
 1. Clone the repository:
-```bash
-git clone [repository-url]
-cd praising_chatbot
-```
+    ```bash
+    git clone [repository-url]
+    cd praising_chatbot
+    ```
+2. (Optional) Create a `.env` file in the root directory:
 
-2. Install uv if you haven't already:
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
+- **For demo/testing (default - no API key needed):**
+    ```bash
+    # No .env file needed! Demo mode is the default.
+    # Or explicitly set:
+    DEMO_MODE=true
+    ```
 
-3. Create a `.env` file in the root directory with your OpenAI API key:
-```bash
-echo "OPENAI_API_KEY=your_openai_api_key_here" > .env
-```
+- **For production (with OpenAI API):**
+    ```bash
+    OPENAI_API_KEY=your_openai_api_key_here
+    DEMO_MODE=false
+    ```
 
-4. Run the application (uv automatically installs dependencies from inline metadata):
-```bash
-uv run app.py
-```
+3. Sync dependencies and run the application:
+    ```bash
+    uv sync
+    uv run main.py
+    ```
 
-The application will start on `http://localhost:7860`
+    The application will start on `http://localhost:7860`
 
-**Note**: `app.py` includes inline script metadata (PEP 723), so `uv run` automatically handles all dependencies without needing a separate install step.
-
-#### Using pip (Alternative)
-
-1. Clone the repository and navigate to the directory
-2. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-3. Create a `.env` file with your OpenAI API key
-4. Run the application:
-```bash
-python app.py
-```
-
-## Deployment
-
-This application is incredibly easy to deploy thanks to its single-file architecture:
-
-### Hugging Face Spaces (Recommended)
-1. Create a new Space on [Hugging Face](https://huggingface.co/spaces)
-2. Select "Gradio" as the SDK
-3. Upload `app.py` and `requirements.txt`
-4. Add your `OPENAI_API_KEY` in the Space settings (Secrets)
-5. Done! Your app is live
-
-### Other Platforms
-The app works on any platform that supports Python:
-- **Render**: Deploy as a Web Service
-- **Railway**: One-click deploy
-- **PythonAnywhere**: Upload and run
-- **Fly.io**: Simple Python deployment
-- **Google Cloud Run**: Containerized deployment
-
-### Docker (Optional)
-
-Using uv (reads inline dependencies from app.py):
-```dockerfile
-FROM ghcr.io/astral-sh/uv:python3.11-bookworm-slim
-WORKDIR /app
-COPY app.py .
-COPY .env .
-EXPOSE 7860
-CMD ["uv", "run", "app.py"]
-```
-
-Or with pip:
-```dockerfile
-FROM python:3.11-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-COPY app.py .
-COPY .env .
-EXPOSE 7860
-CMD ["python", "app.py"]
-```
+**Endpoints:**
+- Gradio UI: `http://localhost:7860/gradio`
+- API docs: `http://localhost:7860/docs`
+- Health check: `http://localhost:7860/health`
+- Stats API: `http://localhost:7860/api/stats`
 
 ## Usage
 
@@ -129,15 +100,57 @@ CMD ["python", "app.py"]
 5. View usage statistics in the accordion section
 6. Clear chat history anytime with the "Clear Chat" button
 
+## Demo Mode
+
+The application **runs in demo mode by default**, allowing you to test the interface without making actual OpenAI API calls. This is perfect for:
+- Testing the application without an API key
+- Development and debugging
+- Demonstrations and presentations
+- Avoiding API costs during testing
+
+### How Demo Mode Works (Default)
+
+- **No API calls**: Uses predefined encouraging responses instead of calling OpenAI
+- **Mock tokens**: Simulates token usage for cost tracking (approximately 1 token per 4 characters)
+- **Same interface**: The UI and API work identically to production mode
+- **Clear indicators**: Console logs and UI banner clearly show when demo mode is active
+
+### Switching to Production Mode
+
+To use real OpenAI API responses, create a `.env` file with:
+
+```bash
+# In .env file
+OPENAI_API_KEY=your_actual_api_key_here
+DEMO_MODE=false
+```
+
+### Re-enabling Demo Mode
+
+To switch back to demo mode:
+
+```bash
+# In .env file
+DEMO_MODE=true
+```
+
+Or simply remove both `DEMO_MODE` and `OPENAI_API_KEY` from your `.env` file (demo is the default).
+
 ## Configuration
 
-You can modify the chatbot's behavior by editing the `SYSTEM_PROMPT` in `app.py`:
+You can modify the chatbot's behavior by editing the `SYSTEM_PROMPT` in [src/config/settings.py](src/config/settings.py):
 
 ```python
 SYSTEM_PROMPT = """You are a supportive and encouraging friend. Your role is to provide positive,
 uplifting responses that make the user feel good about themselves and their achievements.
 Always maintain a positive, humorous and fluffy tone and keep the responses within 50 words. No emoji."""
 ```
+
+Other configuration options in [src/config/settings.py](src/config/settings.py):
+- `DEMO_MODE`: Enable/disable demo mode (default: true)
+- `OPENAI_MODEL`: Change the AI model (default: gpt-4o-mini)
+- `HOST` and `PORT`: Server configuration
+- `COST_PER_MILLION_TOKENS`: Adjust cost calculations
 
 ## Cost Tracking
 
@@ -155,6 +168,15 @@ MIT License - Feel free to use and modify as needed.
 
 Contributions are welcome! Feel free to open issues or submit pull requests.
 
+## Architecture Benefits
+
+The new modular structure provides:
+- **Separation of Concerns**: Frontend and backend are clearly separated
+- **Testability**: Each module can be tested independently
+- **Scalability**: Easy to add new features or replace components
+- **Maintainability**: Clear organization makes code easier to understand
+- **Reusability**: Services can be reused across different interfaces
+
 ## Future Improvements
 
 - Add conversation history (with user opt-in)
@@ -162,3 +184,5 @@ Contributions are welcome! Feel free to open issues or submit pull requests.
 - Customizable themes
 - Export chat history
 - Multi-language support
+- Database integration for persistent storage
+- User authentication and profiles
