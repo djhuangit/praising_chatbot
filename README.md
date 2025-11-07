@@ -160,6 +160,76 @@ The application tracks:
 
 Note: Statistics are stored in-memory and reset when the server restarts.
 
+## Deployment
+
+### Heroku Deployment
+
+This application is ready to deploy on Heroku. Follow these steps:
+
+#### Prerequisites
+- A [Heroku account](https://signup.heroku.com/)
+- [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) installed
+
+#### Quick Deploy
+
+1. **Login to Heroku:**
+   ```bash
+   heroku login
+   ```
+
+2. **Create a new Heroku app:**
+   ```bash
+   heroku create your-app-name
+   ```
+
+3. **Deploy to Heroku:**
+   ```bash
+   git push heroku main
+   ```
+
+4. **Open your application:**
+   ```bash
+   heroku open
+   ```
+
+   Your app will be available at `https://your-app-name.herokuapp.com/gradio`
+
+#### Configuration
+
+**Demo Mode (Default):**
+The app deploys in demo mode by default - no API key required!
+
+**Production Mode with OpenAI API:**
+To enable real OpenAI responses, set your API key:
+
+```bash
+heroku config:set OPENAI_API_KEY=your_openai_api_key_here
+heroku config:set DEMO_MODE=false
+```
+
+**Other Configuration Options:**
+```bash
+# Change the OpenAI model
+heroku config:set OPENAI_MODEL=gpt-4
+
+# Adjust logging level
+heroku config:set LOG_LEVEL=debug
+```
+
+#### View Logs
+
+```bash
+heroku logs --tail
+```
+
+#### Important Notes
+
+- **UV Support**: This project uses `uv` for dependency management. Heroku automatically detects `uv.lock` and uses native `uv` support for faster, more reliable builds.
+- **Python Version**: Heroku uses Python 3.13 (specified in `.python-version`). The app is compatible with Python 3.13+.
+- **Port Configuration**: Heroku automatically sets the `PORT` environment variable, which the app uses.
+- **Persistent Storage**: The app uses in-memory storage, so stats reset on dyno restart.
+- **Free Tier**: Heroku's free tier may cause the app to sleep after 30 minutes of inactivity.
+
 ## License
 
 MIT License - Feel free to use and modify as needed.

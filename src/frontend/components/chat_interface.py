@@ -95,7 +95,8 @@ def create_gradio_interface(
             height=500,
             show_label=False,
             avatar_images=(None, None),
-            bubble_full_width=False
+            bubble_full_width=False,
+            type="tuples"  # Explicitly set to silence deprecation warning
         )
 
         with gr.Row():
