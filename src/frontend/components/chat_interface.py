@@ -1,7 +1,7 @@
 """Gradio chat interface component"""
 import gradio as gr
 import logging
-from src.backend.services import OpenAIService, StatsService
+from src.backend.services import OpenAIService, DemoOpenAIService, StatsService
 
 logger = logging.getLogger(__name__)
 
@@ -14,12 +14,15 @@ def create_gradio_interface(
     Create Gradio chat interface
 
     Args:
-        openai_service: OpenAI service instance
+        openai_service: OpenAI service instance (can be DemoOpenAIService or OpenAIService)
         stats_service: Stats service instance
 
     Returns:
         Gradio Blocks interface
     """
+
+    # Check if demo mode is active
+    is_demo_mode = isinstance(openai_service, DemoOpenAIService)
 
     def chat(message: str, history: list) -> str:
         """
@@ -65,6 +68,20 @@ def create_gradio_interface(
         theme=gr.themes.Soft(),
         title="Praising Chatbot - Your Supportive Chat Space"
     ) as demo:
+        # Demo mode banner (only shown if demo mode is active)
+        if is_demo_mode:
+            gr.Markdown(
+                """
+                <div style="background-color: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                    <h3 style="margin-top: 0; color: #856404;">⚠️ DEMO MODE ACTIVE</h3>
+                    <p style="margin-bottom: 0; color: #856404;">
+                        <strong>This application is running in demo mode.</strong><br>
+                        Responses are generated from predefined templates - no OpenAI API calls are being made.<br>
+                    </p>
+                </div>
+                """
+            )
+
         gr.Markdown(
             """
             # 🌟 Praising Chatbot - Your Supportive Chat Space
@@ -106,13 +123,15 @@ def create_gradio_interface(
                 reset_stats_btn = gr.Button("Reset Stats", size="sm", variant="stop")
             reset_message = gr.Textbox(visible=False)
 
-        gr.Markdown(
-            """
-            ---
-            💡 **About**: This chatbot uses GPT-4o-mini to provide supportive and encouraging responses.
-            All statistics are tracked in-memory and reset when the server restarts.
-            """
-        )
+        # Footer with mode-specific information
+        footer_text = "---\n💡 **About**: "
+        if is_demo_mode:
+            footer_text += "Running in **DEMO MODE** with mock responses. "
+        else:
+            footer_text += "This chatbot uses **GPT-4o-mini** to provide supportive and encouraging responses. "
+        footer_text += "All statistics are tracked in-memory and reset when the server restarts."
+
+        gr.Markdown(footer_text)
 
         # Event handlers
         def respond(message, chat_history):

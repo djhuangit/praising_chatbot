@@ -35,6 +35,7 @@ praising_chatbot/
 │   │   │   └── chat.py             # Chat-related models
 │   │   └── services/               # Business logic
 │   │       ├── openai_service.py   # OpenAI API integration
+│   │       ├── demo_service.py     # Demo/mock service (no API calls)
 │   │       └── stats_service.py    # Usage statistics tracking
 │   ├── frontend/                   # Frontend components
 │   │   └── components/             # UI components
@@ -61,7 +62,7 @@ praising_chatbot/
 ### Prerequisites
 - Python 3.13 or higher
 - [uv](https://docs.astral.sh/uv/) (recommended) or pip
-- OpenAI API key
+- OpenAI API key (required only for production mode; app runs in demo mode by default)
 
 ### Installation
 
@@ -78,9 +79,19 @@ cd praising_chatbot
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-3. Create a `.env` file in the root directory with your OpenAI API key:
+3. (Optional) Create a `.env` file in the root directory:
+
+**For demo/testing (default - no API key needed):**
+```bash
+# No .env file needed! Demo mode is the default.
+# Or explicitly set:
+echo "DEMO_MODE=true" > .env
+```
+
+**For production (with OpenAI API):**
 ```bash
 echo "OPENAI_API_KEY=your_openai_api_key_here" > .env
+echo "DEMO_MODE=false" >> .env
 ```
 
 4. Sync dependencies and run the application:
@@ -122,6 +133,47 @@ python main.py
 5. View usage statistics in the accordion section
 6. Clear chat history anytime with the "Clear Chat" button
 
+## Demo Mode
+
+The application **runs in demo mode by default**, allowing you to test the interface without making actual OpenAI API calls. This is perfect for:
+- Testing the application without an API key
+- Development and debugging
+- Demonstrations and presentations
+- Avoiding API costs during testing
+
+### How Demo Mode Works (Default)
+
+- **No API calls**: Uses predefined encouraging responses instead of calling OpenAI
+- **Mock tokens**: Simulates token usage for cost tracking (approximately 1 token per 4 characters)
+- **Same interface**: The UI and API work identically to production mode
+- **Clear indicators**: Console logs and UI banner clearly show when demo mode is active
+
+### Switching to Production Mode
+
+To use real OpenAI API responses, create a `.env` file with:
+
+```bash
+# In .env file
+OPENAI_API_KEY=your_actual_api_key_here
+DEMO_MODE=false
+```
+
+Or via command line:
+```bash
+OPENAI_API_KEY=your_key DEMO_MODE=false uv run main.py
+```
+
+### Re-enabling Demo Mode
+
+To switch back to demo mode:
+
+```bash
+# In .env file
+DEMO_MODE=true
+```
+
+Or simply remove both `DEMO_MODE` and `OPENAI_API_KEY` from your `.env` file (demo is the default).
+
 ## Configuration
 
 You can modify the chatbot's behavior by editing the `SYSTEM_PROMPT` in [src/config/settings.py](src/config/settings.py):
@@ -133,6 +185,7 @@ Always maintain a positive, humorous and fluffy tone and keep the responses with
 ```
 
 Other configuration options in [src/config/settings.py](src/config/settings.py):
+- `DEMO_MODE`: Enable/disable demo mode (default: true)
 - `OPENAI_MODEL`: Change the AI model (default: gpt-4o-mini)
 - `HOST` and `PORT`: Server configuration
 - `COST_PER_MILLION_TOKENS`: Adjust cost calculations

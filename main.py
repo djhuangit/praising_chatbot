@@ -5,10 +5,10 @@ Built with FastAPI + Gradio for flexible deployment
 """
 import logging
 import gradio as gr
-from src.backend.services import OpenAIService, StatsService
+from src.backend.services import OpenAIService, DemoOpenAIService, StatsService
 from src.backend.api import create_app
 from src.frontend.components import create_gradio_interface
-from src.config import HOST, PORT, LOG_LEVEL
+from src.config import HOST, PORT, LOG_LEVEL, DEMO_MODE
 
 # Configure logging
 logging.basicConfig(
@@ -24,8 +24,18 @@ def main():
     """Main application entry point"""
     logger.info("Starting Praising Chatbot application...")
 
-    # Initialize services
-    openai_service = OpenAIService()
+    # Initialize services based on mode
+    if DEMO_MODE:
+        logger.warning("=" * 60)
+        logger.warning("DEMO MODE ENABLED - Using mock responses")
+        logger.warning("No OpenAI API calls will be made")
+        logger.warning("Set DEMO_MODE=false to use real OpenAI API")
+        logger.warning("=" * 60)
+        openai_service = DemoOpenAIService()
+    else:
+        logger.info("Production mode - Using OpenAI API")
+        openai_service = OpenAIService()
+
     stats_service = StatsService()
 
     # Create FastAPI app

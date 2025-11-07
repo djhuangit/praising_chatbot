@@ -5,10 +5,14 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
+# Demo Mode Configuration
+# Default to true if not explicitly set to false
+DEMO_MODE = os.getenv("DEMO_MODE", "true").lower() in ("true", "1", "yes")
+
 # API Configuration
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-if not OPENAI_API_KEY:
-    raise ValueError("OpenAI API key not found in environment variables")
+if not OPENAI_API_KEY and not DEMO_MODE:
+    raise ValueError("OpenAI API key not found in environment variables. Set OPENAI_API_KEY or set DEMO_MODE=true for testing")
 
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 
