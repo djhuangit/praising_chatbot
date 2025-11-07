@@ -1,3 +1,12 @@
+# /// script
+# requires-python = ">=3.8"
+# dependencies = [
+#     "gradio>=4.44.0",
+#     "openai>=1.61.1",
+#     "python-dotenv>=1.0.0",
+# ]
+# ///
+
 """
 Praising Chatbot - A supportive and encouraging chat application
 Built with Gradio for simple deployment

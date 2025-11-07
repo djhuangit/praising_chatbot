@@ -23,8 +23,9 @@ A supportive and encouraging chat application that provides positive, uplifting 
 
 - ⚡ **10-100x faster** than pip for dependency installation
 - 🔒 **Consistent** - Built-in lock file support
-- 🎯 **Simple** - Run scripts directly with `uv run`
+- 🎯 **Simple** - Run scripts directly with `uv run` (no separate install needed)
 - 🔄 **Compatible** - Works with standard Python packaging (pip, PyPI)
+- 📦 **Self-contained** - Dependencies declared inline using PEP 723
 
 ## Getting Started
 
@@ -49,16 +50,18 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
 3. Create a `.env` file in the root directory with your OpenAI API key:
-```
-OPENAI_API_KEY=your_openai_api_key_here
+```bash
+echo "OPENAI_API_KEY=your_openai_api_key_here" > .env
 ```
 
-4. Run the application (uv will automatically install dependencies):
+4. Run the application (uv automatically installs dependencies from inline metadata):
 ```bash
 uv run app.py
 ```
 
 The application will start on `http://localhost:7860`
+
+**Note**: `app.py` includes inline script metadata (PEP 723), so `uv run` automatically handles all dependencies without needing a separate install step.
 
 #### Using pip (Alternative)
 
