@@ -1,23 +1,52 @@
 # Praising Chatbot - Your Supportive Chat Space
 
-A supportive and encouraging chat application that provides positive, uplifting responses to help users feel good about themselves and their achievements. Built with Gradio for simple deployment and a clean user interface.
+A supportive and encouraging chat application that provides positive, uplifting responses to help users feel good about themselves and their achievements. Built with a clean separation of frontend (Gradio) and backend (FastAPI) components.
 
 ## Features
 
 - Real-time chat interface with Gradio
+- RESTful API with FastAPI backend
 - Supportive AI responses using GPT-4o-mini
 - Cost and token usage tracking
 - Modern, responsive UI
-- Single Python file - easy to deploy anywhere
+- Modular architecture with clear separation of concerns
 - In-memory session tracking (no database required)
 
 ## Tech Stack
 
-- **Python 3.8+**
+- **Python 3.13+**
 - **uv** - Fast Python package manager
-- **Gradio** - For the web interface
+- **FastAPI** - Backend API framework
+- **Gradio** - Frontend web interface
 - **OpenAI API** - For AI responses (gpt-4o-mini)
+- **Pydantic** - Data validation and settings management
 - **Stateless architecture** - No persistent storage required
+
+## Project Structure
+
+```
+praising_chatbot/
+├── src/                            # Source code
+│   ├── backend/                    # Backend components
+│   │   ├── api/                    # FastAPI routes and app
+│   │   │   ├── app.py              # FastAPI app factory
+│   │   │   └── routes.py           # API endpoints
+│   │   ├── models/                 # Data models (Pydantic)
+│   │   │   └── chat.py             # Chat-related models
+│   │   └── services/               # Business logic
+│   │       ├── openai_service.py   # OpenAI API integration
+│   │       └── stats_service.py    # Usage statistics tracking
+│   ├── frontend/                   # Frontend components
+│   │   └── components/             # UI components
+│   │       └── chat_interface.py   # Gradio chat interface
+│   └── config/                     # Configuration
+│       └── settings.py             # Environment variables, constants
+├── main.py                         # Application entry point
+├── app.py                          # Original single-file version (legacy)
+├── pyproject.toml                  # Project configuration
+├── requirements.txt                # Python dependencies
+└── .env                            # Environment variables (not in git)
+```
 
 ### Why uv?
 
@@ -30,7 +59,7 @@ A supportive and encouraging chat application that provides positive, uplifting 
 ## Getting Started
 
 ### Prerequisites
-- Python 3.8 or higher
+- Python 3.13 or higher
 - [uv](https://docs.astral.sh/uv/) (recommended) or pip
 - OpenAI API key
 
@@ -54,70 +83,34 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 echo "OPENAI_API_KEY=your_openai_api_key_here" > .env
 ```
 
-4. Run the application (uv automatically installs dependencies from inline metadata):
+4. Sync dependencies and run the application:
 ```bash
-uv run app.py
+uv sync
+uv run main.py
 ```
 
 The application will start on `http://localhost:7860`
 
-**Note**: `app.py` includes inline script metadata (PEP 723), so `uv run` automatically handles all dependencies without needing a separate install step.
+**Endpoints:**
+- Gradio UI: `http://localhost:7860/gradio`
+- API docs: `http://localhost:7860/docs`
+- Health check: `http://localhost:7860/health`
+- Stats API: `http://localhost:7860/api/stats`
 
 #### Using pip (Alternative)
 
 1. Clone the repository and navigate to the directory
-2. Install dependencies:
+2. Create a virtual environment and install dependencies:
 ```bash
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
 3. Create a `.env` file with your OpenAI API key
 4. Run the application:
 ```bash
-python app.py
-```
-
-## Deployment
-
-This application is incredibly easy to deploy thanks to its single-file architecture:
-
-### Hugging Face Spaces (Recommended)
-1. Create a new Space on [Hugging Face](https://huggingface.co/spaces)
-2. Select "Gradio" as the SDK
-3. Upload `app.py` and `requirements.txt`
-4. Add your `OPENAI_API_KEY` in the Space settings (Secrets)
-5. Done! Your app is live
-
-### Other Platforms
-The app works on any platform that supports Python:
-- **Render**: Deploy as a Web Service
-- **Railway**: One-click deploy
-- **PythonAnywhere**: Upload and run
-- **Fly.io**: Simple Python deployment
-- **Google Cloud Run**: Containerized deployment
-
-### Docker (Optional)
-
-Using uv (reads inline dependencies from app.py):
-```dockerfile
-FROM ghcr.io/astral-sh/uv:python3.11-bookworm-slim
-WORKDIR /app
-COPY app.py .
-COPY .env .
-EXPOSE 7860
-CMD ["uv", "run", "app.py"]
-```
-
-Or with pip:
-```dockerfile
-FROM python:3.11-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-COPY app.py .
-COPY .env .
-EXPOSE 7860
-CMD ["python", "app.py"]
+python main.py
 ```
 
 ## Usage
@@ -131,13 +124,18 @@ CMD ["python", "app.py"]
 
 ## Configuration
 
-You can modify the chatbot's behavior by editing the `SYSTEM_PROMPT` in `app.py`:
+You can modify the chatbot's behavior by editing the `SYSTEM_PROMPT` in [src/config/settings.py](src/config/settings.py):
 
 ```python
 SYSTEM_PROMPT = """You are a supportive and encouraging friend. Your role is to provide positive,
 uplifting responses that make the user feel good about themselves and their achievements.
 Always maintain a positive, humorous and fluffy tone and keep the responses within 50 words. No emoji."""
 ```
+
+Other configuration options in [src/config/settings.py](src/config/settings.py):
+- `OPENAI_MODEL`: Change the AI model (default: gpt-4o-mini)
+- `HOST` and `PORT`: Server configuration
+- `COST_PER_MILLION_TOKENS`: Adjust cost calculations
 
 ## Cost Tracking
 
@@ -155,6 +153,15 @@ MIT License - Feel free to use and modify as needed.
 
 Contributions are welcome! Feel free to open issues or submit pull requests.
 
+## Architecture Benefits
+
+The new modular structure provides:
+- **Separation of Concerns**: Frontend and backend are clearly separated
+- **Testability**: Each module can be tested independently
+- **Scalability**: Easy to add new features or replace components
+- **Maintainability**: Clear organization makes code easier to understand
+- **Reusability**: Services can be reused across different interfaces
+
 ## Future Improvements
 
 - Add conversation history (with user opt-in)
@@ -162,3 +169,5 @@ Contributions are welcome! Feel free to open issues or submit pull requests.
 - Customizable themes
 - Export chat history
 - Multi-language support
+- Database integration for persistent storage
+- User authentication and profiles
