@@ -98,11 +98,10 @@ The app works on any platform that supports Python:
 
 ### Docker (Optional)
 
-Using uv for faster builds:
+Using uv (reads inline dependencies from app.py):
 ```dockerfile
 FROM ghcr.io/astral-sh/uv:python3.11-bookworm-slim
 WORKDIR /app
-COPY pyproject.toml .
 COPY app.py .
 COPY .env .
 EXPOSE 7860
