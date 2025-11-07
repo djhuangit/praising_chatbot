@@ -12,6 +12,9 @@ __pycache__/
 *.db
 *.sqlite3
 
+# JSON storage
+backend/data/
+
 # Build outputs
 dist/
 build/

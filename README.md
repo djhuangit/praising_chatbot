@@ -24,9 +24,8 @@ A supportive and encouraging chat application that provides positive, uplifting 
 
 ### Backend
 - FastAPI
-- SQLAlchemy (Async)
 - OpenAI API
-- PostgreSQL/SQLite
+- Stateless architecture (no persistent storage)
 - Python 3.x
 
 ## Getting Started
@@ -34,7 +33,6 @@ A supportive and encouraging chat application that provides positive, uplifting 
 ### Prerequisites
 - Node.js (v18 or higher)
 - Python 3.x
-- PostgreSQL (for production) or SQLite (for development)
 
 ### Environment Setup
 
@@ -55,8 +53,9 @@ pip install -r requirements.txt
 Create a `.env` file in the backend directory with:
 ```
 OPENAI_API_KEY=your_openai_api_key
-DATABASE_URL=your_database_url
 ```
+
+Note: This application runs in stateless mode - chat history is not persisted. Cost tracking is maintained in-memory during the current session only.
 
 3. Frontend Setup:
 ```bash
@@ -85,10 +84,10 @@ npm run dev
 
 ## Deployment
 
-The application is currently deployed with:
+The application uses a stateless architecture and can be deployed to any platform:
 - Frontend: Netlify
-- Backend: Render Web Service (Planning to try out Python Anywhere)
-- Database: Render PostgreSQL instance (May remove it for simplicity)
+- Backend: Compatible with Heroku, Render, PythonAnywhere, Railway, Fly.io, or any platform supporting Python
+- Storage: No persistent storage required - works with ephemeral filesystems!
 
 ## Future Improvements
 
