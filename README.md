@@ -225,7 +225,7 @@ heroku logs --tail
 #### Important Notes
 
 - **UV Support**: This project uses `uv` for dependency management. Heroku automatically detects `uv.lock` and uses native `uv` support for faster, more reliable builds.
-- **Python Version**: Heroku uses Python 3.12 (specified in `runtime.txt`). The app is compatible with Python 3.12+.
+- **Python Version**: Heroku uses Python 3.13 (specified in `.python-version`). The app is compatible with Python 3.13+.
 - **Port Configuration**: Heroku automatically sets the `PORT` environment variable, which the app uses.
 - **Persistent Storage**: The app uses in-memory storage, so stats reset on dyno restart.
 - **Free Tier**: Heroku's free tier may cause the app to sleep after 30 minutes of inactivity.
