@@ -54,9 +54,11 @@ def main():
     return app
 
 
+# Create app at module level for deployment platforms (Heroku, etc.)
+app = main()
+
 if __name__ == "__main__":
     import uvicorn
-    app = main()
     uvicorn.run(
         app,
         host=HOST,

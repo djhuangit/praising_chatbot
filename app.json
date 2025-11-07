@@ -1,0 +1,32 @@
+{
+  "name": "Praising Chatbot",
+  "description": "A supportive and encouraging chatbot with FastAPI backend and Gradio frontend",
+  "repository": "https://github.com/djhuangit/praising_chatbot",
+  "keywords": ["python", "chatbot", "fastapi", "gradio", "openai"],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ],
+  "env": {
+    "DEMO_MODE": {
+      "description": "Set to 'true' to use demo mode (no API calls), 'false' to use OpenAI API",
+      "value": "true",
+      "required": false
+    },
+    "OPENAI_API_KEY": {
+      "description": "Your OpenAI API key (required only if DEMO_MODE is false)",
+      "required": false
+    },
+    "OPENAI_MODEL": {
+      "description": "OpenAI model to use",
+      "value": "gpt-4o-mini",
+      "required": false
+    },
+    "LOG_LEVEL": {
+      "description": "Logging level (debug, info, warning, error)",
+      "value": "info",
+      "required": false
+    }
+  }
+}
