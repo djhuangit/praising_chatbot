@@ -1,40 +1,30 @@
 # Praising Chatbot - Your Supportive Chat Space
 
-A supportive and encouraging chat application that provides positive, uplifting responses to help users feel good about themselves and their achievements. The application is built with a modern tech stack and features a clean, user-friendly interface.
-
-🌐 Live Demo: [https://djpraisingchat.netlify.app/](https://djpraisingchat.netlify.app/)
+A supportive and encouraging chat application that provides positive, uplifting responses to help users feel good about themselves and their achievements. Built with Gradio for simple deployment and a clean user interface.
 
 ## Features
 
-- Real-time chat interface
-- Supportive AI responses using GPT-4
-- Session-based conversations
+- Real-time chat interface with Gradio
+- Supportive AI responses using GPT-4o-mini
 - Cost and token usage tracking
 - Modern, responsive UI
-- Cross-platform compatibility
+- Single Python file - easy to deploy anywhere
+- In-memory session tracking (no database required)
 
 ## Tech Stack
 
-### Frontend
-- React 18
-- TypeScript
-- Vite
-- Emotion (Styled Components)
-- Axios for API communication
-
-### Backend
-- FastAPI
-- OpenAI API
-- Stateless architecture (no persistent storage)
-- Python 3.x
+- **Python 3.x**
+- **Gradio** - For the web interface
+- **OpenAI API** - For AI responses (gpt-4o-mini)
+- **Stateless architecture** - No persistent storage required
 
 ## Getting Started
 
 ### Prerequisites
-- Node.js (v18 or higher)
-- Python 3.x
+- Python 3.8 or higher
+- OpenAI API key
 
-### Environment Setup
+### Installation
 
 1. Clone the repository:
 ```bash
@@ -42,55 +32,95 @@ git clone [repository-url]
 cd praising_chatbot
 ```
 
-2. Backend Setup:
+2. Install dependencies:
 ```bash
-cd backend
-python -m venv venv
-source venv/bin/activate  # On Windows: .\venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Create a `.env` file in the backend directory with:
+3. Create a `.env` file in the root directory with your OpenAI API key:
 ```
-OPENAI_API_KEY=your_openai_api_key
-```
-
-Note: This application runs in stateless mode - chat history is not persisted. Cost tracking is maintained in-memory during the current session only.
-
-3. Frontend Setup:
-```bash
-cd frontend
-npm install
-```
-
-Create a `.env` file in the frontend directory with:
-```
-VITE_API_URL=http://localhost:8000
+OPENAI_API_KEY=your_openai_api_key_here
 ```
 
 ### Running the Application
 
-1. Start the backend:
+Simply run the single Python file:
 ```bash
-cd backend
-uvicorn main:app --reload
+python app.py
 ```
 
-2. Start the frontend:
-```bash
-cd frontend
-npm run dev
-```
+The application will start on `http://localhost:7860`
 
 ## Deployment
 
-The application uses a stateless architecture and can be deployed to any platform:
-- Frontend: Netlify
-- Backend: Compatible with Heroku, Render, PythonAnywhere, Railway, Fly.io, or any platform supporting Python
-- Storage: No persistent storage required - works with ephemeral filesystems!
+This application is incredibly easy to deploy thanks to its single-file architecture:
+
+### Hugging Face Spaces (Recommended)
+1. Create a new Space on [Hugging Face](https://huggingface.co/spaces)
+2. Select "Gradio" as the SDK
+3. Upload `app.py` and `requirements.txt`
+4. Add your `OPENAI_API_KEY` in the Space settings (Secrets)
+5. Done! Your app is live
+
+### Other Platforms
+The app works on any platform that supports Python:
+- **Render**: Deploy as a Web Service
+- **Railway**: One-click deploy
+- **PythonAnywhere**: Upload and run
+- **Fly.io**: Simple Python deployment
+- **Google Cloud Run**: Containerized deployment
+
+### Docker (Optional)
+```dockerfile
+FROM python:3.11-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY app.py .
+COPY .env .
+EXPOSE 7860
+CMD ["python", "app.py"]
+```
+
+## Usage
+
+1. Open the application in your browser
+2. Type your message in the text box
+3. Click "Send" or press Enter
+4. Receive supportive and encouraging responses
+5. View usage statistics in the accordion section
+6. Clear chat history anytime with the "Clear Chat" button
+
+## Configuration
+
+You can modify the chatbot's behavior by editing the `SYSTEM_PROMPT` in `app.py`:
+
+```python
+SYSTEM_PROMPT = """You are a supportive and encouraging friend. Your role is to provide positive,
+uplifting responses that make the user feel good about themselves and their achievements.
+Always maintain a positive, humorous and fluffy tone and keep the responses within 50 words. No emoji."""
+```
+
+## Cost Tracking
+
+The application tracks:
+- Total tokens used
+- Total cost incurred (based on GPT-4o-mini pricing: $0.15 per million tokens)
+
+Note: Statistics are stored in-memory and reset when the server restarts.
+
+## License
+
+MIT License - Feel free to use and modify as needed.
+
+## Contributing
+
+Contributions are welcome! Feel free to open issues or submit pull requests.
 
 ## Future Improvements
 
-- Add more features to the chatbot
-- Add more tests
-- Add more documentation
+- Add conversation history (with user opt-in)
+- Support for multiple AI models
+- Customizable themes
+- Export chat history
+- Multi-language support
