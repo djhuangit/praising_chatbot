@@ -8,7 +8,6 @@ from datetime import datetime
 import uuid
 from dotenv import load_dotenv
 import logging
-from json_storage import storage
 
 # Configure logging
 logging.basicConfig(
@@ -49,7 +48,7 @@ class ChatMessage(BaseModel):
 class ChatResponse(BaseModel):
     messages: List[dict]
 
-# Cost tracking
+# In-memory cost tracking (resets on server restart)
 total_cost = 0.0
 total_tokens = 0
 
@@ -57,22 +56,12 @@ def calculate_cost(tokens_used: int) -> float:
     cost_per_million_tokens = 0.15  # Cost for gpt-4o-mini
     return (tokens_used / 1_000_000) * cost_per_million_tokens
 
-@app.on_event("startup")
-async def startup_event():
-    global total_cost, total_tokens
-    cost_data = await storage.get_cost_tracking()
-    total_cost = cost_data.get("total_cost", 0.0)
-    total_tokens = cost_data.get("total_tokens", 0)
-
 @app.get("/api/chat/history")
 async def get_chat_history(
     session_id: Optional[str] = Cookie(None)
 ):
-    if not session_id:
-        return {"messages": []}
-
-    messages = await storage.get_chat_history(session_id)
-    return {"messages": [{"role": msg["role"], "content": msg["content"]} for msg in messages]}
+    # Stateless mode - no chat history is stored
+    return {"messages": []}
 
 @app.post("/api/chat/message")
 async def send_message(
@@ -82,9 +71,6 @@ async def send_message(
     global total_cost, total_tokens
     if not session_id:
         session_id = str(uuid.uuid4())
-
-    # Store user message
-    await storage.add_message(session_id, "user", message.content)
 
     # Generate AI response
     try:
@@ -102,10 +88,7 @@ async def send_message(
         total_cost += cost
         total_tokens += tokens_used
 
-        # Update the cost and tokens in JSON storage
-        await storage.update_cost_tracking(total_cost, total_tokens)
-
-        # Log token and cost details
+        # Log token and cost details (in-memory tracking only)
         logging.info(f"Tokens used this request: {tokens_used}")
         logging.info(f"Cost incurred this request: ${cost:.5f}")
         logging.info(f"Total tokens used so far: {total_tokens}")
@@ -113,9 +96,6 @@ async def send_message(
     except Exception as e:
         logging.error(f"OpenAI API error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
-
-    # Store AI response
-    await storage.add_message(session_id, "assistant", ai_response)
 
     return {
         "messages": [

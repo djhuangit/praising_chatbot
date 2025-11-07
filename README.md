@@ -25,7 +25,7 @@ A supportive and encouraging chat application that provides positive, uplifting 
 ### Backend
 - FastAPI
 - OpenAI API
-- JSON file-based storage
+- Stateless architecture (no persistent storage)
 - Python 3.x
 
 ## Getting Started
@@ -55,7 +55,7 @@ Create a `.env` file in the backend directory with:
 OPENAI_API_KEY=your_openai_api_key
 ```
 
-Note: Chat history and token usage will be automatically stored in JSON files in the `backend/data` directory.
+Note: This application runs in stateless mode - chat history is not persisted. Cost tracking is maintained in-memory during the current session only.
 
 3. Frontend Setup:
 ```bash
@@ -84,10 +84,10 @@ npm run dev
 
 ## Deployment
 
-The application is currently deployed with:
+The application uses a stateless architecture and can be deployed to any platform:
 - Frontend: Netlify
-- Backend: Render Web Service (Planning to try out Python Anywhere)
-- Storage: JSON files (no database required!)
+- Backend: Compatible with Heroku, Render, PythonAnywhere, Railway, Fly.io, or any platform supporting Python
+- Storage: No persistent storage required - works with ephemeral filesystems!
 
 ## Future Improvements
 
