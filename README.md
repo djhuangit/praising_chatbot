@@ -13,18 +13,29 @@ A supportive and encouraging chat application that provides positive, uplifting 
 
 ## Tech Stack
 
-- **Python 3.x**
+- **Python 3.8+**
+- **uv** - Fast Python package manager
 - **Gradio** - For the web interface
 - **OpenAI API** - For AI responses (gpt-4o-mini)
 - **Stateless architecture** - No persistent storage required
+
+### Why uv?
+
+- ⚡ **10-100x faster** than pip for dependency installation
+- 🔒 **Consistent** - Built-in lock file support
+- 🎯 **Simple** - Run scripts directly with `uv run`
+- 🔄 **Compatible** - Works with standard Python packaging (pip, PyPI)
 
 ## Getting Started
 
 ### Prerequisites
 - Python 3.8 or higher
+- [uv](https://docs.astral.sh/uv/) (recommended) or pip
 - OpenAI API key
 
 ### Installation
+
+#### Using uv (Recommended - Fast!)
 
 1. Clone the repository:
 ```bash
@@ -32,9 +43,9 @@ git clone [repository-url]
 cd praising_chatbot
 ```
 
-2. Install dependencies:
+2. Install uv if you haven't already:
 ```bash
-pip install -r requirements.txt
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
 3. Create a `.env` file in the root directory with your OpenAI API key:
@@ -42,14 +53,26 @@ pip install -r requirements.txt
 OPENAI_API_KEY=your_openai_api_key_here
 ```
 
-### Running the Application
-
-Simply run the single Python file:
+4. Run the application (uv will automatically install dependencies):
 ```bash
-python app.py
+uv run app.py
 ```
 
 The application will start on `http://localhost:7860`
+
+#### Using pip (Alternative)
+
+1. Clone the repository and navigate to the directory
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+3. Create a `.env` file with your OpenAI API key
+4. Run the application:
+```bash
+python app.py
+```
 
 ## Deployment
 
@@ -71,11 +94,24 @@ The app works on any platform that supports Python:
 - **Google Cloud Run**: Containerized deployment
 
 ### Docker (Optional)
+
+Using uv for faster builds:
+```dockerfile
+FROM ghcr.io/astral-sh/uv:python3.11-bookworm-slim
+WORKDIR /app
+COPY pyproject.toml .
+COPY app.py .
+COPY .env .
+EXPOSE 7860
+CMD ["uv", "run", "app.py"]
+```
+
+Or with pip:
 ```dockerfile
 FROM python:3.11-slim
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 COPY app.py .
 COPY .env .
 EXPOSE 7860

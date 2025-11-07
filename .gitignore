@@ -16,6 +16,11 @@ dist/
 build/
 venv/
 env/
+.venv/
+
+# uv
+.python-version
+uv.lock
 
 # IDE
 .vscode/
