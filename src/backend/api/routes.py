@@ -1,5 +1,6 @@
 """API routes for the FastAPI backend"""
 from fastapi import APIRouter
+from fastapi.responses import RedirectResponse
 from datetime import datetime
 from src.backend.services import StatsService
 
@@ -18,7 +19,13 @@ def set_stats_service(service: StatsService):
 
 @router.get("/")
 async def root():
-    """Root endpoint - API information"""
+    """Root endpoint - Redirect to Gradio UI"""
+    return RedirectResponse(url="/gradio")
+
+
+@router.get("/api")
+async def api_info():
+    """API information endpoint"""
     return {
         "message": "Praising Chatbot API",
         "version": "0.3.0",
