@@ -7,6 +7,12 @@
 node_modules/
 __pycache__/
 *.pyc
+.venv/
+venv/
+
+# UV
+.python-version
+uv.lock
 
 # Database
 *.db

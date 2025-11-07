@@ -1,0 +1,47 @@
+[project]
+name = "praising-chatbot"
+version = "2.0.0"
+description = "A supportive and encouraging AI chatbot powered by Gradio and OpenAI"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+    { name = "DJ Huang" }
+]
+keywords = ["chatbot", "gradio", "openai", "ai", "supportive"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    "fastapi==0.104.1",
+    "uvicorn==0.24.0",
+    "python-dotenv==1.0.0",
+    "openai==1.61.1",
+    "sqlalchemy==2.0.23",
+    "pydantic==2.5.1",
+    "asyncpg==0.29.0",
+    "aiosqlite==0.19.0",
+    "psycopg[binary]==3.1.18",
+    "gradio==4.44.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/djhuangit/praising_chatbot"
+Repository = "https://github.com/djhuangit/praising_chatbot"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = []
+
+[tool.hatch.build.targets.wheel]
+packages = ["backend"]
