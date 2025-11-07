@@ -49,80 +49,47 @@ praising_chatbot/
 └── .env                            # Environment variables (not in git)
 ```
 
-### Why uv?
-
-- ⚡ **10-100x faster** than pip for dependency installation
-- 🔒 **Consistent** - Built-in lock file support
-- 🎯 **Simple** - Run scripts directly with `uv run` (no separate install needed)
-- 🔄 **Compatible** - Works with standard Python packaging (pip, PyPI)
-- 📦 **Self-contained** - Dependencies declared inline using PEP 723
-
 ## Getting Started
 
 ### Prerequisites
 - Python 3.13 or higher
-- [uv](https://docs.astral.sh/uv/) (recommended) or pip
+- uv for dependency management [(docs including installation guide)]((https://docs.astral.sh/uv/))
 - OpenAI API key (required only for production mode; app runs in demo mode by default)
 
-### Installation
-
-#### Using uv (Recommended - Fast!)
-
+### Quick Start
 1. Clone the repository:
-```bash
-git clone [repository-url]
-cd praising_chatbot
-```
+    ```bash
+    git clone [repository-url]
+    cd praising_chatbot
+    ```
+2. (Optional) Create a `.env` file in the root directory:
 
-2. Install uv if you haven't already:
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
+- **For demo/testing (default - no API key needed):**
+    ```bash
+    # No .env file needed! Demo mode is the default.
+    # Or explicitly set:
+    DEMO_MODE=true
+    ```
 
-3. (Optional) Create a `.env` file in the root directory:
+- **For production (with OpenAI API):**
+    ```bash
+    OPENAI_API_KEY=your_openai_api_key_here
+    DEMO_MODE=false
+    ```
 
-**For demo/testing (default - no API key needed):**
-```bash
-# No .env file needed! Demo mode is the default.
-# Or explicitly set:
-echo "DEMO_MODE=true" > .env
-```
+3. Sync dependencies and run the application:
+    ```bash
+    uv sync
+    uv run main.py
+    ```
 
-**For production (with OpenAI API):**
-```bash
-echo "OPENAI_API_KEY=your_openai_api_key_here" > .env
-echo "DEMO_MODE=false" >> .env
-```
-
-4. Sync dependencies and run the application:
-```bash
-uv sync
-uv run main.py
-```
-
-The application will start on `http://localhost:7860`
+    The application will start on `http://localhost:7860`
 
 **Endpoints:**
 - Gradio UI: `http://localhost:7860/gradio`
 - API docs: `http://localhost:7860/docs`
 - Health check: `http://localhost:7860/health`
 - Stats API: `http://localhost:7860/api/stats`
-
-#### Using pip (Alternative)
-
-1. Clone the repository and navigate to the directory
-2. Create a virtual environment and install dependencies:
-```bash
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-3. Create a `.env` file with your OpenAI API key
-4. Run the application:
-```bash
-python main.py
-```
 
 ## Usage
 
@@ -156,11 +123,6 @@ To use real OpenAI API responses, create a `.env` file with:
 # In .env file
 OPENAI_API_KEY=your_actual_api_key_here
 DEMO_MODE=false
-```
-
-Or via command line:
-```bash
-OPENAI_API_KEY=your_key DEMO_MODE=false uv run main.py
 ```
 
 ### Re-enabling Demo Mode
