@@ -3,18 +3,31 @@
 *.env
 .env.*
 
-# Dependencies
-node_modules/
+# Python
 __pycache__/
 *.pyc
-
-# Database
-*.db
-*.sqlite3
-
-# JSON storage
-backend/data/
-
-# Build outputs
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
 dist/
 build/
+venv/
+env/
+.venv/
+
+# uv
+.python-version
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
