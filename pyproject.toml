@@ -1,0 +1,11 @@
+[project]
+name = "praising-chatbot"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "gradio>=5.49.1",
+    "openai>=1.61.1",
+    "python-dotenv>=1.0.0",
+]
