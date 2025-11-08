@@ -2,6 +2,8 @@
 
 A supportive and encouraging chat application that provides positive, uplifting responses to help users feel good about themselves and their achievements. Built with a clean separation of frontend (Gradio) and backend (FastAPI) components.
 
+## Live Demo
+- Hosted on: https://praising-chatbot.djhuang.dev/
 ## Features
 
 - Real-time chat interface with Gradio
