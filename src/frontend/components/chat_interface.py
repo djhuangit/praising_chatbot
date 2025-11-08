@@ -72,12 +72,8 @@ def create_gradio_interface(
         if is_demo_mode:
             gr.Markdown(
                 """
-                <div style="background-color: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
-                    <h3 style="margin-top: 0; color: #856404;">⚠️ DEMO MODE ACTIVE</h3>
-                    <p style="margin-bottom: 0; color: #856404;">
-                        <strong>This application is running in demo mode.</strong><br>
-                        Responses are generated from predefined templates - no OpenAI API calls are being made.<br>
-                    </p>
+                <div style="background-color: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 10px; margin-bottom: 20px; text-align: center;">
+                    <span style="color: #856404; font-weight: bold;">⚠️ DEMO MODE - Using mock responses (no OpenAI API calls)</span>
                 </div>
                 """
             )
