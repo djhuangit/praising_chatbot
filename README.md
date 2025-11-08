@@ -80,16 +80,16 @@ praising_chatbot/
 3. Sync dependencies and run the application:
     ```bash
     uv sync
-    uv run main.py
+    uv run uvicorn main:app
     ```
 
-    The application will start on `http://localhost:7860`
+    The application will start on `http://localhost:8000`
 
 **Endpoints:**
-- Gradio UI: `http://localhost:7860/gradio`
-- API docs: `http://localhost:7860/docs`
-- Health check: `http://localhost:7860/health`
-- Stats API: `http://localhost:7860/api/stats`
+- Gradio UI: `http://localhost:8000/gradio`
+- API docs: `http://localhost:8000/docs`
+- Health check: `http://localhost:8000/health`
+- Stats API: `http://localhost:8000/api/stats`
 
 ## Usage
 
@@ -149,7 +149,7 @@ Always maintain a positive, humorous and fluffy tone and keep the responses with
 Other configuration options in [src/config/settings.py](src/config/settings.py):
 - `DEMO_MODE`: Enable/disable demo mode (default: true)
 - `OPENAI_MODEL`: Change the AI model (default: gpt-4o-mini)
-- `HOST` and `PORT`: Server configuration
+- `HOST` and `PORT`: Server configuration (default: 0.0.0.0:8000)
 - `COST_PER_MILLION_TOKENS`: Adjust cost calculations
 
 ## Cost Tracking
