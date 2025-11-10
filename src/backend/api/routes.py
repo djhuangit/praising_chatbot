@@ -27,7 +27,7 @@ async def root():
 async def api_info():
     """API information endpoint"""
     return {
-        "message": "Praising Chatbot API",
+        "message": "CheerUp Bot API",
         "version": "0.3.0",
         "endpoints": {
             "api_docs": "/docs",

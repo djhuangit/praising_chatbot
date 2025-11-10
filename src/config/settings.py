@@ -22,7 +22,7 @@ PORT = int(os.getenv("PORT", "8000"))
 LOG_LEVEL = os.getenv("LOG_LEVEL", "info")
 
 # Application Configuration
-APP_TITLE = "Praising Chatbot"
+APP_TITLE = "CheerUp Bot"
 APP_VERSION = "0.3.0"
 APP_DESCRIPTION = "A supportive chatbot with FastAPI backend and Gradio frontend"
 

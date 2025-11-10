@@ -66,7 +66,7 @@ def create_gradio_interface(
     # Create Gradio interface
     with gr.Blocks(
         theme=gr.themes.Soft(),
-        title="Praising Chatbot - Your Supportive Chat Space"
+        title="CheerUp Bot - Your Supportive Chat Space"
     ) as demo:
         # Demo mode banner (only shown if demo mode is active)
         if is_demo_mode:
@@ -80,7 +80,7 @@ def create_gradio_interface(
 
         gr.Markdown(
             """
-            # 🌟 Praising Chatbot - Your Supportive Chat Space
+            # 🌟 CheerUp Bot - Your Supportive Chat Space
 
             Welcome! I'm here to provide positive, uplifting responses to help you feel good
             about yourself and your achievements. Share anything with me!

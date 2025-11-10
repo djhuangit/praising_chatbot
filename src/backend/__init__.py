@@ -1,1 +1,1 @@
-"""Backend module for Praising Chatbot"""
+"""Backend module for CheerUp Bot"""

@@ -1,5 +1,5 @@
 {
-  "name": "Praising Chatbot",
+  "name": "CheerUp Bot",
   "description": "A supportive and encouraging chatbot with FastAPI backend and Gradio frontend",
   "repository": "https://github.com/djhuangit/praising_chatbot",
   "keywords": ["python", "chatbot", "fastapi", "gradio", "openai"],

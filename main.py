@@ -1,5 +1,5 @@
 """
-Praising Chatbot - Main entry point
+CheerUp Bot - Main entry point
 A supportive and encouraging chat application
 Built with FastAPI + Gradio for flexible deployment
 """
@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 def main():
     """Main application entry point"""
-    logger.info("Starting Praising Chatbot application...")
+    logger.info("Starting CheerUp Bot application...")
 
     # Initialize services based on mode
     if DEMO_MODE:
