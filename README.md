@@ -45,7 +45,6 @@ praising_chatbot/
 │   └── config/                     # Configuration
 │       └── settings.py             # Environment variables, constants
 ├── main.py                         # Application entry point
-├── app.py                          # Original single-file version (legacy)
 ├── pyproject.toml                  # Project configuration
 ├── requirements.txt                # Python dependencies
 └── .env                            # Environment variables (not in git)
